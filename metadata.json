@@ -1,0 +1,8 @@
+{
+  "name": "FazAI Spark Command Center",
+  "description": "A high-performance agentic dashboard for managing the FazAI system, featuring Gemini 3 Pro thinking mode, Qdrant integration visualization, and automated sysadmin task dispatching.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
