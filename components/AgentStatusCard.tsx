@@ -23,37 +23,37 @@ export const AgentStatusCard: React.FC<AgentStatusCardProps> = ({ state }) => {
   return (
     <div className="p-4 rounded-xl bg-[#111114] border border-[#1e1e24] shadow-xl">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-bold text-slate-400 uppercase">Agent Status</h2>
-        <div className={`w-2.5 h-2.5 rounded-full ${getStatusColor()} animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.3)]`}></div>
+        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Agent Monitoring</h2>
+        <div className={`w-2 h-2 rounded-full ${getStatusColor()} animate-pulse`}></div>
       </div>
       
       <div className="space-y-4">
-        <div>
-          <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Current State</div>
-          <div className="text-lg font-bold text-white tracking-tight">{state.status}</div>
+        <div className="flex flex-col">
+          <span className="text-[9px] text-slate-500 font-bold uppercase">Status Atual</span>
+          <span className="text-lg font-bold text-white leading-none mt-1">{state.status}</span>
         </div>
 
-        <div>
-          <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Processing Task</div>
-          <div className="text-xs text-slate-300 italic truncate" title={state.currentTask || 'None'}>
-            {state.currentTask || 'Waiting for input...'}
-          </div>
+        <div className="flex flex-col">
+          <span className="text-[9px] text-slate-500 font-bold uppercase">Tarefa em Fila</span>
+          <span className="text-xs text-slate-400 italic truncate mt-1" title={state.currentTask || 'Nenhuma'}>
+            {state.currentTask || 'Aguardando pulso...'}
+          </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-3">
           <div className="p-2 bg-black/40 rounded border border-[#2d2d35]">
-            <div className="text-[9px] text-slate-500 font-bold uppercase">Iteration</div>
-            <div className="text-sm font-bold text-white">{state.iterations} / {state.maxIterations}</div>
+            <div className="text-[8px] text-slate-500 font-bold uppercase">Ciclo</div>
+            <div className="text-xs font-bold text-white">{state.iterations} / {state.maxIterations}</div>
           </div>
           <div className="p-2 bg-black/40 rounded border border-[#2d2d35]">
-            <div className="text-[9px] text-slate-500 font-bold uppercase">Reflections</div>
-            <div className="text-sm font-bold text-white">{state.reflections.length}</div>
+            <div className="text-[8px] text-slate-500 font-bold uppercase">Insights</div>
+            <div className="text-xs font-bold text-white">{state.reflections.length}</div>
           </div>
         </div>
 
-        <div className="w-full bg-[#1e1e24] h-1.5 rounded-full overflow-hidden">
+        <div className="w-full bg-[#1e1e24] h-1 rounded-full overflow-hidden">
           <div 
-            className={`h-full transition-all duration-500 ease-out ${getStatusColor()}`}
+            className={`h-full transition-all duration-700 ease-in-out ${getStatusColor()}`}
             style={{ width: `${(state.iterations / state.maxIterations) * 100}%` }}
           ></div>
         </div>

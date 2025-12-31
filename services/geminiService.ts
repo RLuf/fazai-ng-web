@@ -12,21 +12,28 @@ export class GeminiService {
   }
 
   /**
-   * Dispatches the task using Spark Logic
+   * Dispatches the task using Spark Logic with knowledge of local infrastructure
    */
   async dispatchTask(task: string): Promise<{ type: 'trigger' | 'direct', content: string }> {
     const prompt = `
-      Voce e a INTELIGENCIA PURA (Spark) conectada ao socket do FazAI.
-      Seu objetivo e ser o DESPACHANTE DE ELITE.
+      Voce e a INTELIGENCIA PURA (Spark) do ecossistema FazAI-NG.
+      Seu ambiente:
+      - Host: Xeon Biprocessado (Fedora).
+      - LLM Local: Ollama (home.rogerluft.com.br:11434).
+      - Embeddings: Ollama (1536 dim).
+      - Orquestrador: Maestro (home.rogerluft.com.br:11430) c/ Phi-3 e Qdrant.
+      - Socket: /tmp/fazai-spark.sock.
+
+      OBJETIVO: Ser o DESPACHANTE DE ELITE.
       
-      ORDEM RECEBIDA: "${task}"
+      ORDEM: "${task}"
       
       DIRETRIZES:
-      1. Se a ordem exigir alteracao no sistema (criar arquivo, instalar, monitorar, redes), repasse para o MAESTRO.
-         -> Saida: >>> MAESTRO_TRIGGER: [ordem normalizada]
-      2. Se for consulta de conhecimento, analise de texto ou duvida, responda diretamente em Portugues ASCII.
+      1. Se a ordem exigir acao no hardware, rede ou Qdrant, use: >>> MAESTRO_TRIGGER: [ordem]
+      2. Se for analise ou explicacao, responda em Portugues ASCII.
+      3. Voce conhece o CLI 'fazai'.
       
-      Pense profundamente (Thinking Mode ativo).
+      Pense profundamente (Thinking Mode).
     `;
 
     try {
@@ -49,23 +56,17 @@ export class GeminiService {
     }
   }
 
-  /**
-   * Runs an agentic loop simulation (Search -> Reflect -> Generate)
-   */
   async reflectOnContext(context: string, results: any[]): Promise<any> {
     const prompt = `
-      Voce e o sistema de reflexao agentico do FazAI. 
-      Analise os resultados do Qdrant e o contexto atual.
-      
-      CONTEXTO: ${context}
+      Analise os dados do Qdrant (home.rogerluft.com.br:11430) para o contexto: ${context}
       RESULTADOS: ${JSON.stringify(results)}
       
-      Responda estritamente em JSON:
+      Responda em JSON:
       {
         "was_productive": boolean,
-        "key_insight": "insight principal em Portugues ASCII",
+        "key_insight": "string ASCII",
         "should_continue": boolean,
-        "next_action": "proxima acao recomendada",
+        "next_action": "string",
         "confidence": 0.0-1.0
       }
     `;
@@ -79,11 +80,9 @@ export class GeminiService {
           responseMimeType: "application/json"
         },
       });
-
       return JSON.parse(response.text || "{}");
     } catch (error) {
-      console.error("Gemini Reflection Error:", error);
-      return { was_productive: false, key_insight: "Erro na reflexao", should_continue: false };
+      return { was_productive: false, key_insight: "Erro local", should_continue: false };
     }
   }
 }
